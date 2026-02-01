@@ -1,0 +1,30 @@
+(function() {
+    console.log("Searching for Video Payload...");
+    
+    // 1. Locate the video source (even if hidden)
+    const videoElem = document.querySelector('video source') || document.querySelector('video');
+    const directLink = videoElem ? videoElem.src : null;
+    
+    // 2. Fallback: Search the page scripts for the .mp4 or .m3u8 string
+    const pageHtml = document.documentElement.innerHTML;
+    const regex = /https?:\/\/[^\s"'<>]+\.(mp4|m3u8)/g;
+    const foundLinks = pageHtml.match(regex);
+    
+    const finalUrl = directLink || (foundLinks ? foundLinks[0] : null);
+
+    if (finalUrl) {
+        console.log("TARGET ACQUIRED: " + finalUrl);
+        
+        // 3. Create a secret link and 'click' it to force download
+        const downloadLink = document.createElement('a');
+        downloadLink.href = finalUrl;
+        downloadLink.download = 'GTA6_Trailer3_LEAK.mp4';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        
+        alert("Download Started! Check your notification bar.");
+    } else {
+        alert("Video file is still server-side. It will likely appear at exactly 11:00 AM EST.");
+    }
+})();
