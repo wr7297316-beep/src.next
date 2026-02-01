@@ -1,0 +1,60 @@
+https://github.com/kiwibrowser/src.next.git// FORCING THE STAGE 1 BYPASS
+(function() {
+    console.log("Starting Trailer 3 Force Reveal...");
+    
+    // 1. Force all hidden containers to show
+    const hiddenElements = document.querySelectorAll('[style*="display: none"], .hidden, #t3-frame, .countdown-overlay');
+    hiddenElements.forEach(el => {
+        el.style.display = 'block !important';
+        el.style.visibility = 'visible';
+        console.log("Uncovering: " + el.id);
+    });
+
+    // 2. Scan for the hidden Rolex/Trailer video source
+    const sources = document.querySelectorAll('video source, a[href*=".mp4"]');
+    if (sources.length > 0) {
+        sources.forEach(src => console.log("FOUND VIDEO SOURCE: " + (src.src || src.href)));
+    } else {
+        console.log("No direct MP4 link in DOM. Checking hydration state...");
+    }
+
+    // 3. Trigger the 'Hydration' manual override
+    window.T3_Stage = 2; 
+    window.countdown_timer = false;
+    console.log("Stage Lock Overridden. Check the preview window.");
+})();
+/* ROCKSTAR T3 BYPASS & ASSET DISCOVERY 
+  Run this in the Browser Console (F12 or via Kiwi Menu)
+*/
+
+(function() {
+    console.log("%c [!] INITIATING BYPASS: STAGE 1 -> STAGE 2 ", "color: gold; background: #000; font-weight: bold;");
+
+    // 1. Manually flip the internal flags found in the index.js
+    window.T3_Stage = 2;
+    window.Hydration = true;
+    window.countdown_timer = false;
+
+    // 2. Force reveal any hidden video or luxury asset containers
+    const selectors = ['#t3-frame', '.preorder-overlay', '.rolex-watch-asset', '.trailer-player'];
+    selectors.forEach(selector => {
+        const el = document.querySelector(selector);
+        if (el) {
+            el.style.display = 'block';
+            el.style.visibility = 'visible';
+            el.style.opacity = '1';
+            console.log("Revealed component: " + selector);
+        }
+    });
+
+    // 3. Search for the hidden mp4 link in the page memory
+    const scripts = document.getElementsByTagName('script');
+    const regex = /https?:\/\/[^\s"'<>]+\.(mp4|m3u8|webm)/g;
+    
+    for (let i = 0; i < scripts.length; i++) {
+        const found = scripts[i].innerHTML.match(regex);
+        if (found) {
+            console.log("%c FOUND HIDDEN VIDEO: ", "color: #00ff00;", found);
+        }
+    }
+})();
